@@ -6,7 +6,7 @@ import { supabase, Pothole } from './lib/supabase';
 import { Route } from './types';
 import * as L from 'leaflet';
 import { motion, AnimatePresence } from 'motion/react';
-import { MapPin, AlertCircle, Loader2, X, Navigation } from 'lucide-react';
+import { MapPin, AlertCircle, Loader2, X, Navigation, Info } from 'lucide-react';
 import { cn } from './lib/utils';
 
 export default function App() {
@@ -36,6 +36,8 @@ export default function App() {
 
   const lastRerouteLocation = useRef<[number, number] | null>(null);
   const apiKey = import.meta.env.VITE_GEOAPIFY_API_KEY;
+
+  const [showAbout, setShowAbout] = useState(false);
 
   const fetchPotholes = useCallback(async () => {
     try {
@@ -512,10 +514,135 @@ export default function App() {
       )}
 
       {/* App Branding Overlay */}
-      <div className="absolute bottom-4 left-4 z-10 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border border-gray-200 flex items-center gap-2">
-        <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
-        <span className="text-xs font-bold text-gray-700 tracking-tight uppercase">Geoapify Pothole Navigator</span>
+      <div className="absolute bottom-4 left-4 z-10 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-lg border border-gray-200 flex flex-col gap-1 max-w-[200px]">
+        <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-blue-600 rounded-full animate-pulse" />
+            <span className="text-sm font-black text-gray-900 tracking-tight uppercase">Safe-Roads</span>
+          </div>
+          <button 
+            onClick={() => setShowAbout(true)}
+            className="p-1 hover:bg-gray-100 rounded-full text-gray-400 transition-colors"
+            title="Project Info"
+          >
+            <Info className="w-3.5 h-3.5" />
+          </button>
+        </div>
+        <div className="flex flex-col">
+          <p className="text-[10px] font-bold text-gray-500 leading-tight">ML-Based Infrastructure Monitoring</p>
+          <p className="text-[9px] text-gray-400 mt-1 italic">By Om, Varad & Hariom (PCCOE Pune)</p>
+        </div>
       </div>
+
+      {/* About Modal */}
+      <AnimatePresence>
+        {showAbout && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setShowAbout(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-hidden flex flex-col"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-6 border-b border-gray-100 flex items-center justify-between bg-blue-50/50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                    <Navigation className="w-6 h-6" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-black text-gray-900 uppercase tracking-tight">Safe-Roads</h2>
+                    <p className="text-xs font-bold text-blue-600 uppercase tracking-wider">Project Identity & Research</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setShowAbout(false)}
+                  className="p-2 hover:bg-white rounded-full text-gray-400 shadow-sm transition-all"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              
+              <div className="p-8 overflow-y-auto custom-scrollbar space-y-8">
+                <section>
+                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <div className="w-1 h-4 bg-blue-600 rounded-full" />
+                    About Us
+                  </h3>
+                  <p className="text-gray-600 leading-relaxed text-sm">
+                    Safe-Roads is a cutting-edge research initiative dedicated to revolutionizing road infrastructure monitoring through artificial intelligence and computer vision. Developed by <strong>Om Khalane, Varad Pisale, and Hariom Gundale</strong> from <strong>Pimpri Chinchwad College Of Engineering (PCCOE) Pune</strong>.
+                  </p>
+                </section>
+
+                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                    <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Our Mission</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed">To design, develop, and deploy a high-accuracy pothole detection system using state-of-the-art deep learning techniques.</p>
+                  </div>
+                  <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100">
+                    <h4 className="text-xs font-black text-blue-600 uppercase tracking-widest mb-2">Our Vision</h4>
+                    <p className="text-xs text-gray-600 leading-relaxed">To extend into a comprehensive, nationwide ML-based road monitoring system, enabling proactive maintenance.</p>
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <div className="w-1 h-4 bg-blue-600 rounded-full" />
+                    Model Performance
+                  </h3>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    {[
+                      { label: 'Accuracy', val: '98.0%' },
+                      { label: 'Precision', val: '97.5%' },
+                      { label: 'Recall', val: '98.3%' },
+                      { label: 'F1-Score', val: '97.9%' },
+                    ].map(stat => (
+                      <div key={stat.label} className="text-center p-3 bg-blue-50 rounded-xl border border-blue-100">
+                        <p className="text-[10px] font-bold text-blue-400 uppercase tracking-tighter mb-1">{stat.label}</p>
+                        <p className="text-lg font-black text-blue-700">{stat.val}</p>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+
+                <section>
+                  <h3 className="text-sm font-black text-gray-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <div className="w-1 h-4 bg-blue-600 rounded-full" />
+                    Technical Stack
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {['Python', 'TensorFlow', 'Keras', 'OpenCV', 'NumPy', 'Pandas', 'Matplotlib', 'CNN', 'Transfer Learning'].map(tech => (
+                      <span key={tech} className="px-3 py-1 bg-gray-100 text-gray-600 rounded-full text-[10px] font-bold uppercase tracking-wider border border-gray-200">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </section>
+
+                <div className="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                  <p className="text-[10px] text-gray-400 font-medium italic">
+                    © 2026 Safe-Roads Team • PCCOE Pune
+                  </p>
+                  <a 
+                    href="https://github.com/Safe-Roads" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                  >
+                    View Organization on GitHub
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Image Gallery Modal */}
       <AnimatePresence>

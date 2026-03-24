@@ -13,7 +13,7 @@ import {
 import * as L from 'leaflet';
 import { Pothole } from '../lib/supabase';
 import { Route } from '../types';
-import { Info, Filter, AlertTriangle, Navigation2, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Info, Filter, AlertTriangle, Navigation2, ThumbsUp, ThumbsDown, Github } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 // Fix Leaflet marker icon issue
@@ -405,6 +405,20 @@ export default function MapView({
           userHeading={userHeading}
           isTracking={isTracking}
         />
+
+        {/* GitHub Star Button */}
+        <div className="absolute top-2 right-14 z-[1000]">
+          <a
+            href="https://github.com/Safe-Roads/Map"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg shadow-md border border-gray-200 hover:bg-white transition-all hover:scale-105 active:scale-95 group"
+          >
+            <Github className="w-4 h-4 text-gray-700 group-hover:text-black" />
+            <span className="text-xs font-bold text-gray-700 group-hover:text-black">Star us</span>
+          </a>
+        </div>
+
         <LayersControl position="topright">
           <LayersControl.BaseLayer checked name="Standard">
             <TileLayer
@@ -568,7 +582,19 @@ export default function MapView({
       </MapContainer>
 
       {/* UI Overlays */}
-      <div className="absolute top-4 right-12 z-10 flex flex-col gap-2">
+      <div className="absolute top-4 right-12 z-10 flex flex-col gap-2 items-end">
+        {/* GitHub Star Button */}
+        <a
+          href="https://github.com/Safe-Roads/Map"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-white/90 backdrop-blur px-3 py-2 rounded-xl shadow-lg border border-gray-200 flex items-center gap-2 hover:bg-white transition-all hover:scale-105 group"
+          title="Star us on GitHub"
+        >
+          <Github className="w-4 h-4 text-gray-900" />
+          <span className="text-xs font-bold text-gray-700">Star us on GitHub</span>
+        </a>
+
         {/* Alternate Routes Panel */}
         {allRoutes.length > 1 && (
           <div className="bg-white/90 backdrop-blur p-3 rounded-xl shadow-lg border border-gray-200 w-48">

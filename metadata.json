@@ -1,5 +1,5 @@
 {
-  "name": "Pothole Tracker & Navigator",
-  "description": "A modern web application for tracking potholes and navigating safely with real-time warnings.",
+  "name": "Safe-Roads: ML-Based Road Infrastructure Monitoring",
+  "description": "Safe-Roads is an ML-driven research initiative focused on automated pothole detection and smart road infrastructure monitoring using deep learning. Developed by Om Khalane, Varad Pisale, and Hariom Gundale from PCCOE Pune.",
   "requestFramePermissions": ["geolocation"]
 }
