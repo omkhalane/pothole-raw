@@ -17,7 +17,10 @@ export type Pothole = {
   latitude: number;
   longitude: number;
   confidence: number;
+  severity: 1 | 2 | 3 | 4 | 5;
   image_url: string;
   status: 'detected' | 'fixed';
   created_at: string;
+  upvotes: number;
+  downvotes: number;
 };
