@@ -1,0 +1,5 @@
+{
+  "name": "Pothole Tracker & Navigator",
+  "description": "A modern web application for tracking potholes and navigating safely with real-time warnings.",
+  "requestFramePermissions": ["geolocation"]
+}
